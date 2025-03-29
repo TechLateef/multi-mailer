@@ -1,0 +1,36 @@
+{
+  "name": "email-sender-package",
+  "version": "1.0.0",
+  "description": "A package for sending emails using Brevo and other mail services with support for HTML and Pug templates.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "email",
+    "mailer",
+    "brevo",
+    "pug",
+    "html"
+  ],
+  "author": "Abdullateef Mubarak",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@types/nodemailer": "^6.4.17",
+    "@types/pug": "^2.0.10",
+    "html-to-text": "^9.0.5",
+    "jest": "^27.0.6",
+    "nodemailer": "^6.10.0",
+    "pug": "^3.0.3",
+    "ts-jest": "^29.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  }
+}
