@@ -20,12 +20,9 @@ describe("EmailService", () => {
     it("should have a sendEmail method", () => {
         expect(typeof emailService.sendEmail).toBe("function");
     });
-
-    it("should set a new template path", () => {
-        const newPath = "src/new-templates";
-        emailService.setTemplatePath(newPath);
-        // Assuming TemplateService has a method to get the current path for testing
-        expect((emailService as any).templateService.templatePath).toBe(newPath);
+    it("should create a nodemailer transporter", () => {
+        const transporter = emailService["createTransporter"]();
+        expect(transporter).toBeDefined();
     });
 });
 

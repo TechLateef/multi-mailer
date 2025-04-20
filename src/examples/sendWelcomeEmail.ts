@@ -1,10 +1,11 @@
 import EmailService from "../services/emailService";
 
 async function sendWelcomeEmail() {
+   
     const emailService = new EmailService(
-        "no-reply@example.com", // Sender email
         "user@example.com",     // Recipient email
-        "Welcome to Our Service" // Email subject
+        "Welcome to Our Service", // Email subject
+        "no-reply@example.com", // Sender email
     );
 
     const template = "welcome"; // Name of the template file (e.g., welcome.html)

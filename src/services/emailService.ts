@@ -1,29 +1,32 @@
 import { createTransport, Transporter } from "nodemailer";
 import TemplateService from "./templateService";
+import { join, extname } from "path";
+import { existsSync, readdirSync } from "fs";
+import dotenv from "dotenv"; // Load environment variables from .env file
 
-/**
- * EmailService handles sending emails using nodemailer and supports dynamic templates.
- */
+dotenv.config();
+
+
+
 class EmailService {
     private transporter: Transporter;
     private templateService: TemplateService;
+    private templatePath: string;
 
-    /**
-     * Creates an instance of EmailService.
-     * @param from - The sender's email address.
-     * @param to - The recipient's email address.
-     * @param subject - The subject of the email.
-     * @param templatePath - The base path for email templates.
-     */
+
+    
     constructor(
-        private from: string,
         private to: string,
         private subject: string,
-        templatePath: string = process.env.TEMPLATE_PATH || "src/core/helpers/mails/"
+        private from?: string,
+        templatePath: string = process.env.TEMPLATE_PATH || "src/examples/mails/",
+       
     ) {
         this.transporter = this.createTransporter();
-        this.templateService = new TemplateService(templatePath);
+        this.templatePath = templatePath; // Store templatePath as a class property
+        this.templateService = new TemplateService(this.templatePath);
     }
+
 
     /**
      * Creates a nodemailer transporter instance.
@@ -41,13 +44,6 @@ class EmailService {
         });
     }
 
-    /**
-     * Updates the template path for the TemplateService.
-     * @param path - The new template path.
-     */
-    public setTemplatePath(path: string): void {
-        this.templateService.setTemplatePath(path);
-    }
 
     /**
      * Sends an email using the specified template and parameters.
@@ -59,10 +55,24 @@ class EmailService {
     public async sendEmail(template: string, params: any = {}, attachments: any[] = []): Promise<void> {
         try {
             let html: string;
+            // console.log("Base template path:", this.templatePath);
 
-            if (template.endsWith(".pug")) {
+            // Dynamically resolve the template file with its extension
+            const filesInPath = readdirSync(this.templatePath); // Get all files in the template directory
+            const matchingFile = filesInPath.find(file => file.startsWith(template) && (file.endsWith(".pug") || file.endsWith(".html")));
+
+            if (!matchingFile) {
+                throw new Error(`Template not found: ${template}. Ensure the template exists in the specified path.`);
+            }
+
+            const fullTemplatePath = join(this.templatePath, matchingFile); // Construct the full path to the template
+            console.log("Resolved template path:", fullTemplatePath);
+
+            // Render the template based on its extension
+            const extension = extname(fullTemplatePath); // Get the file extension
+            if (extension === ".pug") {
                 html = this.templateService.renderPugTemplate(template, params);
-            } else if (template.endsWith(".html")) {
+            } else if (extension === ".html") {
                 const rawTemplate = this.templateService.loadTemplate(template);
                 html = this.templateService.replacePlaceholders(rawTemplate, params);
             } else {
@@ -70,7 +80,7 @@ class EmailService {
             }
 
             const mailOptions = {
-                from: this.from,
+                from:process.env.MAIL_FROM || this.from,
                 to: this.to,
                 subject: this.subject,
                 html,
@@ -83,6 +93,8 @@ class EmailService {
             throw error;
         }
     }
+
+    
 }
 
 export default EmailService;
