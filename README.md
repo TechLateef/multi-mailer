@@ -1,118 +1,138 @@
-# Email Sender Package
+# Multi-Mailer
 
-A simple and flexible email sending package that supports Brevo and other mail services. This package allows you to send emails using HTML and Pug templates, with easy configuration through environment variables.
+Multi-Mailer is a flexible and easy-to-use email sending package that supports multiple providers like Brevo, Mailjet, SendGrid, and Mailgun. It allows you to send emails using HTML and Pug templates with ease.
 
 ## Features
 
-- Send emails using various mail services.
-- Support for HTML and Pug templates.
-- Easy configuration with environment variables.
-- Template path management.
+- Support for multiple email providers (e.g., Brevo, Mailjet, SendGrid, Mailgun).
+- Send emails with dynamic data using HTML or Pug templates.
+- Easy configuration using environment variables.
+- Attachments support.
 
 ## Installation
 
 To install the package, run:
 
+```bash
+npm install
 ```
-npm install email-sender-package
+
+## Configuration
+
+Create a `.env` file in the root directory of your project and configure the following variables based on your SMTP provider.
+
+### For Brevo
+
+```env
+MAIL_HOST=smtp-relay.brevo.com
+MAIL_PORT=587
+MAIL_USERNAME=your_brevo_username
+MAIL_PASSWORD=your_brevo_password
+MAIL_SECURE=false
+MAIL_FROM=your_email@example.com
+TEMPLATE_PATH=src/core/helpers/mails/
+```
+
+### For Mailjet
+
+```env
+MAIL_HOST=in-v3.mailjet.com
+MAIL_PORT=587
+MAIL_USERNAME=your_mailjet_public_api_key
+MAIL_PASSWORD=your_mailjet_private_api_key
+MAIL_SECURE=false
+MAIL_FROM=your_email@example.com
+TEMPLATE_PATH=src/core/helpers/mails/
+```
+
+### For SendGrid
+
+```env
+MAIL_HOST=smtp.sendgrid.net
+MAIL_PORT=587
+MAIL_USERNAME=apikey # Use "apikey" as the username for SendGrid
+MAIL_PASSWORD=your_sendgrid_api_key
+MAIL_SECURE=false
+MAIL_FROM=your_email@example.com
+TEMPLATE_PATH=src/core/helpers/mails/
+```
+
+### For Mailgun
+
+```env
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_USERNAME=your_mailgun_username
+MAIL_PASSWORD=your_mailgun_password
+MAIL_SECURE=false
+MAIL_FROM=your_email@example.com
+TEMPLATE_PATH=src/core/helpers/mails/
 ```
 
 ## Usage
 
-### Configuration
+### Sending an Email
 
-Create a `.env` file in your project root and add the following environment variables:
-
-```
-MAIL_SERVICE_HOST=smtp-relay.brevo.com
-MAIL_SERVICE_PORT=587
-MAIL_SERVICE_USERNAME=your_username
-MAIL_SERVICE_PASSWORD=your_password
-```
-
-### Sending Emails
+Here's an example of how to send a welcome email:
 
 ```typescript
-import { EmailService } from 'email-sender-package';
+import EmailService from "./src/services/emailService";
 
-const emailService = new EmailService({
-  to: 'recipient@example.com',
-  from: 'sender@example.com',
-  subject: 'Hello World',
-});
+async function sendWelcomeEmail() {
+    const emailService = new EmailService(
+        "recipient@example.com", // Recipient email
+        "no-reply@example.com"   // Sender email
+    );
 
-// Send an email with HTML template
-emailService.sendEmail('welcome', 'Welcome to Our Service', { name: 'User' });
+    const template = "welcome"; // Name of the template file (e.g., welcome.html)
+    const params = { name: "John Doe" };
 
+    try {
+        await emailService.sendEmail(template, "Welcome to Our Service", params);
+        console.log("Welcome email sent successfully!");
+    } catch (error) {
+        console.error("Failed to send welcome email:", error);
+    }
+}
+
+sendWelcomeEmail();
 ```
 
-## API Reference
+### Templates
 
-### EmailService
+Place your email templates in the directory specified by the `TEMPLATE_PATH` environment variable. Supported formats are `.html` and `.pug`.
 
-- `constructor(options: EmailOptions)`: Initializes the email service with the provided options.
-- `sendEmail(template: string, subject: string, params: any)`: Sends an email using the specified HTML template.
+Example `welcome.html`:
 
-### TemplateService
-
-- `setTemplatePath(path: string)`: Sets the path for loading templates.
-- `loadTemplate(template: string)`: Loads the specified template and returns the content.
-
-## Contribution
-
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Commit your changes with clear and concise messages.
-4. Push your branch to your forked repository.
-5. Open a pull request to the main repository.
-
-Please ensure your code follows the project's coding standards and includes appropriate tests.
-
-## Supported Email Providers
-
-This package currently supports the following email providers:
-
-- **Brevo**: A reliable email service provider for transactional and marketing emails.
-- **Mailjet**: A powerful email API for sending and tracking emails.
-
-To use a specific provider, configure the environment variables accordingly in your `.env` file. For example, for Mailjet:
-
-```
-MAIL_SERVICE_HOST=in-v3.mailjet.com
-MAIL_SERVICE_PORT=587
-MAIL_SERVICE_USERNAME=your_mailjet_api_key
-MAIL_SERVICE_PASSWORD=your_mailjet_secret_key
+```html
+<html>
+  <body>
+    <h1>Welcome, {{name}}!</h1>
+    <p>Thank you for joining our service.</p>
+  </body>
+</html>
 ```
 
-## Examples
+## Running Tests
 
-Here are some additional examples to help you get started:
+To run the tests, use:
 
-### Using Pug Templates
-
-```typescript
-emailService.sendEmail('welcome.pug', 'Welcome to Our Service', { name: 'User' });
+```bash
+npm test
 ```
 
-### Using Plain Text Emails
+## Publishing to npm
 
-```typescript
-emailService.sendPlainTextEmail('Hello, this is a plain text email!');
-```
-
-### Customizing Template Path
-
-```typescript
-import { TemplateService } from 'email-sender-package';
-
-const templateService = new TemplateService();
-templateService.setTemplatePath('/path/to/templates');
-```
-
-Feel free to explore and adapt these examples to suit your needs!
+This project includes a GitHub Actions workflow to publish the package to npm when a new version tag is pushed. Ensure you have set the `NPM_TOKEN` secret in your repository.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## Author
+
+Abdullateef Mubarak
