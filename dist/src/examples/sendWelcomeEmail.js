@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const emailService_1 = __importDefault(require("../services/emailService"));
 async function sendWelcomeEmail() {
     const emailService = new emailService_1.default("techlateef@gmail.com");
-    const template = "mk"; // Name of the template file (e.g., welcome.html)
+    const template = "pugmail"; // Name of the template file (e.g., welcome.html)
     const params = {
-        name: "John Doe",
+        name: "mk yuh",
     };
     try {
         await emailService.sendEmail(template, "Welcome to Our Service", params);

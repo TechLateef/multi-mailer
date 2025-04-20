@@ -21,6 +21,8 @@
     "nodemailer",
     "brevo",
     "mailjet",
+    "sendgrid",
+    "mailgun",
     "html",
     "pug"
   ],

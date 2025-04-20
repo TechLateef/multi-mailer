@@ -14,7 +14,7 @@ Multi-Mailer is a flexible and easy-to-use email sending package that supports m
 To install the package, run:
 
 ```bash
-npm install
+npm install multi-mailer
 ```
 
 ## Configuration
@@ -112,18 +112,6 @@ Example `welcome.html`:
   </body>
 </html>
 ```
-
-## Running Tests
-
-To run the tests, use:
-
-```bash
-npm test
-```
-
-## Publishing to npm
-
-This project includes a GitHub Actions workflow to publish the package to npm when a new version tag is pushed. Ensure you have set the `NPM_TOKEN` secret in your repository.
 
 ## License
 
