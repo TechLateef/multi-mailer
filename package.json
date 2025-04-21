@@ -1,8 +1,8 @@
 {
   "name": "multi-mailer",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A flexible and easy-to-use email sending package supporting multiple providers like Brevo and Mailjet, with support for HTML and Pug templates.",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc",
     "test": "jest"
@@ -30,7 +30,10 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.5.0",
-    "fs-extra": "^11.3.0"
+    "fs-extra": "^11.3.0",
+    "nodemailer": "^6.10.1",
+    "pug": "^3.0.3",
+    "html-to-text": "^9.0.5"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

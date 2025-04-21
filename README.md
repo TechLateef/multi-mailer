@@ -69,6 +69,8 @@ MAIL_FROM=your_email@example.com
 TEMPLATE_PATH=src/core/helpers/mails/
 ```
 
+> **Note:** Ensure that the `TEMPLATE_PATH` environment variable points to the directory containing your email templates. For example, if your template is located at `src/core/helpers/mails/welcome.html`, set `TEMPLATE_PATH=src/core/helpers/mails/`.
+
 ## Usage
 
 ### Sending an Email
@@ -76,26 +78,31 @@ TEMPLATE_PATH=src/core/helpers/mails/
 Here's an example of how to send a welcome email:
 
 ```typescript
-import EmailService from "./src/services/emailService";
+import {EmailService} from 'multi-mailer';
 
-async function sendWelcomeEmail() {
-    const emailService = new EmailService(
-        "recipient@example.com", // Recipient email
-        "no-reply@example.com"   // Sender email
-    );
+async function sendWelcomeEmail(recipientEmail: string, userName: string) {
+    // Initialize the EmailService with the recipient's email
+    const emailService = new EmailService(recipientEmail);
 
-    const template = "welcome"; // Name of the template file (e.g., welcome.html)
-    const params = { name: "John Doe" };
+    // Define the template and parameters
+    const template = "welcome.html"; // Name of the template file (e.g., welcome.html)
+    const params = {
+        name: userName, // Dynamic name for the template
+    };
 
     try {
+        // Send the email
         await emailService.sendEmail(template, "Welcome to Our Service", params);
-        console.log("Welcome email sent successfully!");
+        console.log(`Welcome email sent successfully to ${recipientEmail}!`);
     } catch (error) {
-        console.error("Failed to send welcome email:", error);
+        console.error(`Failed to send welcome email to ${recipientEmail}:`, error);
     }
 }
 
-sendWelcomeEmail();
+// Example usage: Sending a welcome email to a dynamic recipient
+const recipientEmail = "newuser@example.com"; // Replace with the recipient's email
+const userName = "John Doe"; // Replace with the user's name
+sendWelcomeEmail(recipientEmail, userName);
 ```
 
 ### Templates

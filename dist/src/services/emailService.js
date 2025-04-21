@@ -10,7 +10,7 @@ const fs_1 = require("fs");
 const dotenv_1 = __importDefault(require("dotenv")); // Load environment variables from .env file
 dotenv_1.default.config();
 class EmailService {
-    constructor(to, from, templatePath = process.env.TEMPLATE_PATH || "src/examples/mails/") {
+    constructor(to, from, templatePath = process.env.TEMPLATE_PATH || "") {
         this.to = to;
         this.from = from;
         this.transporter = this.createTransporter();
@@ -50,7 +50,7 @@ class EmailService {
                 throw new Error(`Template not found: ${template}. Ensure the template exists in the specified path.`);
             }
             const fullTemplatePath = (0, path_1.join)(this.templatePath, matchingFile); // Construct the full path to the template
-            console.log("Resolved template path:", fullTemplatePath);
+            // console.log("Resolved template path:", fullTemplatePath);
             // Render the template based on its extension
             const extension = (0, path_1.extname)(fullTemplatePath); // Get the file extension
             if (extension === ".pug") {

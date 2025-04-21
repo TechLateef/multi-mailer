@@ -14,12 +14,12 @@ class EmailService {
     private templatePath: string;
 
 
-    
+
     constructor(
         private to: string,
         private from?: string,
-        templatePath: string = process.env.TEMPLATE_PATH || "src/examples/mails/",
-       
+        templatePath: string = process.env.TEMPLATE_PATH || "",
+
     ) {
         this.transporter = this.createTransporter();
         this.templatePath = templatePath; // Store templatePath as a class property
@@ -40,6 +40,7 @@ class EmailService {
                 user: process.env.MAIL_USERNAME || "",
                 pass: process.env.MAIL_PASSWORD || "",
             },
+           
         });
     }
 
@@ -51,7 +52,7 @@ class EmailService {
      * @param attachments - An array of attachments to include in the email.
      * @throws Will throw an error if the template format is unsupported or if sending fails.
      */
-    public async sendEmail(template: string,subject:string, params: any = {}, attachments: any[] = []): Promise<void> {
+    public async sendEmail(template: string, subject: string, params: any = {}, attachments: any[] = []): Promise<void> {
         try {
             let html: string;
             // console.log("Base template path:", this.templatePath);
@@ -65,7 +66,7 @@ class EmailService {
             }
 
             const fullTemplatePath = join(this.templatePath, matchingFile); // Construct the full path to the template
-            console.log("Resolved template path:", fullTemplatePath);
+            // console.log("Resolved template path:", fullTemplatePath);
 
             // Render the template based on its extension
             const extension = extname(fullTemplatePath); // Get the file extension
@@ -79,7 +80,7 @@ class EmailService {
             }
 
             const mailOptions = {
-                from:process.env.MAIL_FROM || this.from,
+                from: process.env.MAIL_FROM || this.from,
                 to: this.to,
                 subject: subject,
                 html,
@@ -93,7 +94,7 @@ class EmailService {
         }
     }
 
-    
+
 }
 
 export default EmailService;
